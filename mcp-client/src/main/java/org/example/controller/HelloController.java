@@ -1,14 +1,31 @@
 package org.example.controller;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
+import org.example.service.ChatService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("hello")
 public class HelloController {
+    @Resource
+    private ChatService chatService;
+
     @GetMapping("world")
     public String helloWorld() {
         return "Hello World!";
     }
+    @GetMapping("chat")
+    public String chat(String msg) {
+        return chatService.chatTest(msg);
+    }
+    @GetMapping("chat/stream")
+    public Flux<String> chatStreamStr(String msg, HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        return chatService.streamStr(msg);
+    }
+
 }
