@@ -1,4 +1,5 @@
 package org.example.service;
+import org.example.bean.ChatEntity;
 import reactor.core.publisher.Flux;
 
 public interface ChatService {
@@ -15,4 +16,11 @@ public interface ChatService {
      * @return
      */
     public Flux<String> streamStr(String prompt);
+
+    /**
+     * 和大模型交互
+     * @param
+     * @return
+     */
+    public void doChat(ChatEntity chatEntity);
 }

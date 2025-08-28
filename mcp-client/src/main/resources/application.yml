@@ -6,3 +6,6 @@ spring:
       chat:
         options:
           model: ${OPENAI_MODEL}
+
+  profiles:
+    active: dev
