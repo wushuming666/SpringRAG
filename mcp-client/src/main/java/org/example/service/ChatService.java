@@ -29,4 +29,7 @@ public interface ChatService {
 
     // 将RAG搜出来的润色
     public void doChatRagSearch(ChatEntity chatEntity, List<Document> ragContext);
+
+    // 将通过搜索工具搜出来的润色
+    public void doInternetSearch(ChatEntity chatEntity);
 }
