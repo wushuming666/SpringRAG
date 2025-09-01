@@ -9,11 +9,14 @@ import org.example.utils.SSEServer;
 import org.example.enums.SSEMsgType;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.ai.document.Document;
 
 @Service
 @Slf4j
@@ -63,5 +66,55 @@ public class ChatServiceImpl implements ChatService {
 
         SSEServer.sendMsg(userId, JSONUtil.toJsonStr(chatResponseEntity), SSEMsgType.FINISH);
 
+    }
+
+    private static final String ragPROMPT = """
+                                              基于上下文的知识库内容回答问题：
+                                              【上下文】
+                                              {context}
+                                              
+                                              【问题】
+                                              {question}
+                                              
+                                              【输出】
+                                              如果没有查到，请回复：不知道。
+                                              如果查到，请回复具体的内容。不相关的近似内容不必提到。
+                                              """;
+
+    @Override
+    public void doChatRagSearch(ChatEntity chatEntity, List<Document> ragContext) {
+        String userId = chatEntity.getCurrentUserName();
+        String question = chatEntity.getMessage();
+        String botMsgId = chatEntity.getBotMsgId();
+
+        // 构建提示词
+        String context = null;
+        if (ragContext != null && ragContext.size() > 0) {
+            context = ragContext.stream()
+                    .map(Document::getText)
+                    .collect(Collectors.joining("\n"));
+        }
+
+        // 组装提示词
+        Prompt prompt = new Prompt(ragPROMPT
+                .replace("{context}", context)
+                .replace("{question}", question));
+
+        System.out.println(prompt.toString());
+
+        Flux<String> stringFlux = chatClient.prompt(prompt).stream().content();
+
+        List<String> list = stringFlux.toStream().map(chatResponse -> {
+            String content = chatResponse.toString();
+            SSEServer.sendMsg(userId, content, SSEMsgType.ADD);
+            log.info("content: {}", content);
+            return content;
+        }).collect(Collectors.toList());
+
+        String fullContent = list.stream().collect(Collectors.joining());
+
+        ChatResponseEntity chatResponseEntity = new ChatResponseEntity(fullContent, botMsgId);
+
+        SSEServer.sendMsg(userId, JSONUtil.toJsonStr(chatResponseEntity), SSEMsgType.FINISH);
     }
 }

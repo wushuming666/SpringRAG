@@ -1,6 +1,9 @@
 package org.example.service;
 import org.example.bean.ChatEntity;
 import reactor.core.publisher.Flux;
+import org.springframework.ai.document.Document;
+
+import java.util.List;
 
 public interface ChatService {
     /**
@@ -23,4 +26,7 @@ public interface ChatService {
      * @return
      */
     public void doChat(ChatEntity chatEntity);
+
+    // 将RAG搜出来的润色
+    public void doChatRagSearch(ChatEntity chatEntity, List<Document> ragContext);
 }
