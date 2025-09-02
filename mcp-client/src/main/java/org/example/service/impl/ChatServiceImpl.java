@@ -11,6 +11,7 @@ import org.example.service.SesrXngService;
 import org.example.utils.SSEServer;
 import org.example.enums.SSEMsgType;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.tool.ToolCallbackProvider;
@@ -29,16 +30,13 @@ public class ChatServiceImpl implements ChatService {
     @Resource
     private SesrXngService sesrXngService;
     private ChatMemory chatMemory;
-    private String systemPrompt =
-            """
-                你的名字叫Bob
-            """;
+
 
     //构造器注入
-    public ChatServiceImpl(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools) {
+    public ChatServiceImpl(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools, ChatMemory chatMemory) {
         this.chatClient = chatClientBuilder
-//                .defaultSystem(systemPrompt)
                 .defaultToolCallbacks(tools)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }
 

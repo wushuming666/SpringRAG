@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.mcp.tool.DateTool;
+import org.example.mcp.tool.EmailTool;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
@@ -20,9 +21,9 @@ public class Application {
      * 注册MCP工具
      */
     @Bean
-    public ToolCallbackProvider registMCPTools(DateTool dateTool) {
+    public ToolCallbackProvider registMCPTools(DateTool dateTool, EmailTool emailTool) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(dateTool)
+                .toolObjects(dateTool, emailTool)
                 .build();
     }
 

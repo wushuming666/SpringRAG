@@ -53,6 +53,19 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- 邮件依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- MarkDown 格式转 HTML 格式工具 -->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.64.8</version>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -10,7 +10,21 @@ spring:
         version: 1.0.0
         sse-endpoint: /sse
         type: async
-
+  mail:
+    host: smtp.163.com               # 邮箱host
+    port: 465                      # 邮箱固定端口
+    username: dfea45g@163.com
+    password: xxx
+    protocol: smtp                  # 邮箱协议
+    default-encoding: UTF-8         # 默认编码
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+          ssl:
+            enable: true
 logging:
   level:
     root: info
