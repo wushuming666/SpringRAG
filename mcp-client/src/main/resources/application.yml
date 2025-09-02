@@ -11,6 +11,18 @@ spring:
         initialize-schema: true         # 是否初始化所需的模式
         index-name: lee-vectorstore     # 用于存储向量的索引名称
         prefix: 'embedding:'             # Redis 键的前缀
+    mcp:
+      client:
+        enabled: true
+        name: spring-ai-mcp-client-1.0.0
+        type: ASYNC
+        sse:
+          connections:
+            server1:
+              url: https://mcp.amap.com
+              sse-endpoint: /sse?key=09557e21174fff33be82c6cf0fa2cbcb
+        stdio:
+          servers-configuration: classpath:mcp-server.json
   data:
     redis:
       host: 127.0.0.1

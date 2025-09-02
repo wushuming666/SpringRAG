@@ -13,6 +13,7 @@ import org.example.enums.SSEMsgType;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -34,9 +35,10 @@ public class ChatServiceImpl implements ChatService {
             """;
 
     //构造器注入
-    public ChatServiceImpl(ChatClient.Builder chatClientBuilder) {
+    public ChatServiceImpl(ChatClient.Builder chatClientBuilder, ToolCallbackProvider tools) {
         this.chatClient = chatClientBuilder
-                .defaultSystem(systemPrompt)
+//                .defaultSystem(systemPrompt)
+                .defaultToolCallbacks(tools)
                 .build();
     }
 
