@@ -21,6 +21,9 @@ spring:
             server1:
               url: https://mcp.amap.com
               sse-endpoint: /sse?key=09557e21174fff33be82c6cf0fa2cbcb
+            server2:
+              url: http://localhost:9060
+              sse-endpoint: /sse
         stdio:
           servers-configuration: classpath:mcp-server.json
   data:
